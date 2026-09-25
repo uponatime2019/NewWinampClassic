@@ -1,0 +1,113 @@
+﻿<Page
+    x:Class="NewWinampClassic.Views.DownloadsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="using:NewWinampClassic.Models"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <DataTemplate x:Key="TrackTemplate" x:DataType="models:SoundCloudTrack">
+            <Grid Height="24" ColumnSpacing="4" Margin="4,0,4,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0" FontFamily="Consolas" FontSize="11" Foreground="#00E800" TextTrimming="CharacterEllipsis" VerticalAlignment="Center">
+                    <Run Text="{x:Bind Title}" />
+                    <Run Text=" - " Foreground="#008800" />
+                    <Run Text="{x:Bind DisplayArtist}" Foreground="#00B800" />
+                </TextBlock>
+
+                <!--  Action Buttons  -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="4" VerticalAlignment="Center">
+                    <Button
+                        Height="20"
+                        Width="20"
+                        Padding="0"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Click="PlayButton_Click"
+                        ToolTipService.ToolTip="Play">
+                        <FontIcon Glyph="&#xE768;" FontSize="10" Foreground="#00E800" />
+                    </Button>
+                    <Button
+                        Height="20"
+                        Width="20"
+                        Padding="0"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Click="DownloadButton_Click"
+                        ToolTipService.ToolTip="Download">
+                        <FontIcon Glyph="&#xE896;" FontSize="10" Foreground="#00E800" />
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+    </Page.Resources>
+
+    <Grid Padding="8,6,8,6" RowSpacing="6" Background="#050D05">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!--  Header  -->
+        <TextBlock Grid.Row="0" Text="WINAMP DOWNLOADS" FontFamily="Consolas" FontSize="13" FontWeight="Bold" Foreground="#22E222" VerticalAlignment="Center" />
+
+        <!--  Search  -->
+        <AutoSuggestBox
+            x:Name="SearchBox"
+            Grid.Row="1"
+            Height="24"
+            FontFamily="Consolas"
+            FontSize="11"
+            PlaceholderText="Search SoundCloud..."
+            QueryIcon="Find"
+            QuerySubmitted="SearchBox_QuerySubmitted" />
+
+        <!--  Recent Searches  -->
+        <StackPanel
+            x:Name="RecentSearchesPanel"
+            Grid.Row="2"
+            Orientation="Horizontal"
+            Spacing="6"
+            Visibility="Collapsed" />
+
+        <!--  Status + Progress  -->
+        <Grid Grid.Row="3" ColumnSpacing="8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock
+                x:Name="StatusText"
+                FontFamily="Consolas"
+                Foreground="#00B800"
+                FontSize="10"
+                VerticalAlignment="Center" />
+            <ProgressBar
+                x:Name="DownloadProgressBar"
+                Grid.Column="1"
+                Width="120"
+                Height="3"
+                Visibility="Collapsed" />
+        </Grid>
+
+        <!--  Results — click a track to play instantly  -->
+        <ListView
+            x:Name="ResultsListView"
+            Grid.Row="4"
+            Background="#000000"
+            ItemTemplate="{StaticResource TrackTemplate}"
+            SelectionMode="Single"
+            IsItemClickEnabled="True"
+            ItemContainerStyle="{StaticResource WaPlaylistItemStyle}"
+            ItemClick="ResultsListView_ItemClick" />
+    </Grid>
+</Page>

@@ -1,0 +1,75 @@
+﻿<Page
+    x:Class="NewWinampClassic.Views.SearchPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="using:NewWinampClassic.Models"
+    mc:Ignorable="d">
+
+    <Grid Padding="8,6,8,6" RowSpacing="6" Background="#050D05">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <TextBlock Grid.Row="0" Text="WINAMP SEARCH &amp; DOWNLOAD" FontFamily="Consolas" FontSize="13" FontWeight="Bold" Foreground="#22E222" VerticalAlignment="Center" />
+
+        <!-- Search Mode Toggles -->
+        <Grid Grid.Row="1" ColumnSpacing="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <ToggleButton x:Name="BtnLocalMode" Style="{StaticResource WaToggleButton}" Height="24" Content="LOCAL LIBRARY" FontSize="10" FontWeight="Bold" IsChecked="True" Click="LocalMode_Click" />
+            <ToggleButton x:Name="BtnOnlineMode" Grid.Column="1" Style="{StaticResource WaToggleButton}" Height="24" Content="ONLINE (SOUNDCLOUD)" FontSize="10" FontWeight="Bold" Click="OnlineMode_Click" />
+        </Grid>
+
+        <!-- Search Input -->
+        <AutoSuggestBox x:Name="SearchBox" Grid.Row="2" Height="24" FontFamily="Consolas" FontSize="11" PlaceholderText="Search songs, artists, or online tracks..." QueryIcon="Find" QuerySubmitted="SearchBox_QuerySubmitted" />
+
+        <!-- Status + Progress Bar -->
+        <Grid Grid.Row="3" ColumnSpacing="6" x:Name="StatusRow" Visibility="Collapsed">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock x:Name="StatusText" FontFamily="Consolas" FontSize="10" Foreground="#00B800" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+            <ProgressBar x:Name="DownloadProgressBar" Grid.Column="1" Width="100" Height="3" Visibility="Collapsed" />
+        </Grid>
+
+        <!-- Local Results Panel -->
+        <Grid Grid.Row="4" x:Name="LocalResultsPanel">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <StackPanel x:Name="ArtistsSection" Grid.Row="0" Spacing="4" Margin="0,0,0,4" Visibility="Collapsed">
+                <TextBlock Text="ARTISTS" FontFamily="Consolas" FontSize="11" FontWeight="Bold" Foreground="#22E222" />
+                <ListView x:Name="ArtistsListView" MaxHeight="80" Background="#000000" SelectionMode="Single" IsItemClickEnabled="True" ItemContainerStyle="{StaticResource WaPlaylistItemStyle}" />
+            </StackPanel>
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <TextBlock x:Name="ResultsHeader" Grid.Row="0" Text="LOCAL TRACKS" FontFamily="Consolas" FontSize="11" FontWeight="Bold" Foreground="#22E222" Margin="0,0,0,2" Visibility="Collapsed" />
+                <ListView x:Name="ResultsListView" Grid.Row="1" Background="#000000" SelectionMode="Single" IsItemClickEnabled="True" ItemContainerStyle="{StaticResource WaPlaylistItemStyle}" />
+            </Grid>
+        </Grid>
+
+        <!-- Online Results Panel -->
+        <Grid Grid.Row="4" x:Name="OnlineResultsPanel" Visibility="Collapsed">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Text="ONLINE TRACKS (SOUNDCLOUD)" FontFamily="Consolas" FontSize="11" FontWeight="Bold" Foreground="#22E222" Margin="0,0,0,2" />
+            <ListView x:Name="OnlineResultsListView" Grid.Row="1" Background="#000000" SelectionMode="Single" IsItemClickEnabled="True" ItemContainerStyle="{StaticResource WaPlaylistItemStyle}" ItemClick="OnlineResultsListView_ItemClick" />
+        </Grid>
+    </Grid>
+</Page>

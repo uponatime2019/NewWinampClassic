@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Window
+    x:Class="NewWinampClassic.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:NewWinampClassic.Controls"
+    xmlns:models="using:NewWinampClassic.Models">
+
+    <Grid x:Name="RootGrid" RequestedTheme="Dark" Background="#101014">
+        <StackPanel x:Name="RootStack" Width="550" HorizontalAlignment="Left">
+
+            <!-- ================= MAIN PLAYER WINDOW (550 x 232) ================= -->
+            <Border x:Name="MainWin" Height="232" Width="550" Background="{StaticResource WaBodyBrush}" BorderBrush="#14141A" BorderThickness="1" CornerRadius="2" Margin="0,0,0,2">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="36" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <!-- title bar -->
+                    <Border x:Name="MainTitleBar" Grid.Row="0" Background="{StaticResource WaTitleBarBrush}" BorderBrush="#24242C" BorderThickness="0,0,0,1">
+                        <Grid Background="Transparent">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
+                                <Button x:Name="BtnMainMenu" Style="{StaticResource WaMetalButton}" Width="34" Height="24" Margin="6,0,0,0" Padding="0" ToolTipService.ToolTip="Main menu">
+                                    <Path Data="M9,1 L13,7 L10,7 L12,13 L6,6 L9,6 Z" Fill="#FFB418" Stretch="Uniform" Width="14" Height="14" />
+                                    <Button.Flyout>
+                                        <MenuFlyout>
+                                            <MenuFlyoutItem Text="Open file(s)..." Click="MenuOpenFiles_Click" />
+                                            <MenuFlyoutItem Text="Add folder..." Click="MenuAddFolder_Click" />
+                                            <MenuFlyoutSeparator />
+                                            <MenuFlyoutItem Text="Play / Pause" Click="MenuPlayPause_Click" />
+                                            <MenuFlyoutItem Text="Stop" Click="MenuStop_Click" />
+                                            <MenuFlyoutSeparator />
+                                            <MenuFlyoutItem Text="Equalizer" Click="MenuToggleEq_Click" />
+                                            <MenuFlyoutItem Text="Playlist Editor" Click="MenuTogglePl_Click" />
+                                            <MenuFlyoutItem Text="Media Library" Click="MenuToggleMl_Click" />
+                                            <MenuFlyoutSeparator />
+                                            <MenuFlyoutItem Text="Always on top" Click="MenuAlwaysOnTop_Click" />
+                                            <MenuFlyoutSeparator />
+                                            <MenuFlyoutItem Text="About" Click="MenuAbout_Click" />
+                                            <MenuFlyoutItem Text="Exit" Click="MenuExit_Click" />
+                                        </MenuFlyout>
+                                    </Button.Flyout>
+                                </Button>
+                            </StackPanel>
+                            <Grid x:Name="TitleDragArea" HorizontalAlignment="Stretch" Margin="48,0,105,0" VerticalAlignment="Stretch" Background="Transparent">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" IsHitTestVisible="False">
+                                    <TextBlock Style="{StaticResource WaTitleText}" Text="WINAMP" />
+                                    <TextBlock Style="{StaticResource WaTinyText}" Text="classic" Margin="6,2,0,0" Foreground="#2C2C34" />
+                                </StackPanel>
+                            </Grid>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,6,0">
+                                <Button x:Name="BtnTitleMl" Style="{StaticResource WaMetalButton}"  Height="22" Margin="0,0,4,0" Padding="0" ToolTipService.ToolTip="Media Library" Click="BtnMlToggle_Click">
+                                    <TextBlock Text="LIBRARY" FontFamily="Consolas" FontSize="12" FontWeight="Bold" Foreground="#D8DCE0" />
+                                </Button>
+                                <Button x:Name="BtnMinimize" Style="{StaticResource WaMetalButton}" Width="30" Height="22" Margin="0,0,4,0" Padding="0" ToolTipService.ToolTip="Minimize" Click="BtnMinimize_Click">
+                                    <Rectangle Width="10" Height="3" Fill="#D8DCE0" />
+                                </Button>
+                                <Button x:Name="BtnClose" Style="{StaticResource WaMetalButton}" Width="30" Height="22" Padding="0" Background="#6E2828" ToolTipService.ToolTip="Close" Click="BtnClose_Click">
+                                    <Path Data="M0,0 L8,8 M8,0 L0,8" Stroke="#F0D8D8" StrokeThickness="2" Stretch="None" Width="8" Height="8" />
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- main window body -->
+                    <Canvas x:Name="MainBodyCanvas" Grid.Row="1">
+
+                        <!-- clutterbar -->
+                        <StackPanel x:Name="ClutterBar" Canvas.Left="8" Canvas.Top="6" Orientation="Vertical" Spacing="1">
+                            <Button x:Name="ClutterO" Style="{StaticResource WaMetalButton}" Width="26" Height="20" Padding="0" FontSize="10" Content="O" ToolTipService.ToolTip="Open file(s)" Click="ClutterO_Click" />
+                            <Button x:Name="ClutterA" Style="{StaticResource WaMetalButton}" Width="26" Height="20" Padding="0" FontSize="10" Content="A" ToolTipService.ToolTip="Always on top" Click="ClutterA_Click" />
+                            <Button x:Name="ClutterI" Style="{StaticResource WaMetalButton}" Width="26" Height="20" Padding="0" FontSize="10" Content="I" ToolTipService.ToolTip="File info (Media Library)" Click="ClutterI_Click" />
+                            <Button x:Name="ClutterD" Style="{StaticResource WaMetalButton}" Width="26" Height="20" Padding="0" FontSize="10" Content="D" ToolTipService.ToolTip="Double size" Click="ClutterD_Click" />
+                            <Button x:Name="ClutterV" Style="{StaticResource WaMetalButton}" Width="26" Height="20" Padding="0" FontSize="10" Content="V" ToolTipService.ToolTip="Visualization" Click="ClutterV_Click" />
+                        </StackPanel>
+
+                        <!-- LCD display block -->
+                        <Border x:Name="LcdPanel" Canvas.Left="40" Canvas.Top="4" Width="502" Height="112" Background="{StaticResource WaLcdBgBrush}" BorderBrush="#060C06" BorderThickness="1" CornerRadius="2">
+                            <Grid Margin="6,4">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="42" />
+                                    <RowDefinition Height="22" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+
+                                <!-- info strip: bitrate / kHz / mono-stereo / time -->
+                                <Grid Grid.Row="0">
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                        <controls:LcdNumber x:Name="BitrateDisplay" Text="128" DigitWidth="11" VerticalAlignment="Center" ToolTipService.ToolTip="Bitrate (kbps)" />
+                                        <TextBlock Text="kbps" FontFamily="Tahoma" FontSize="9" Foreground="#1E7A1E" Margin="4,10,0,0" VerticalAlignment="Center" />
+                                        <controls:LcdNumber x:Name="KhzDisplay" Text="44" DigitWidth="11" Margin="12,0,0,0" VerticalAlignment="Center" ToolTipService.ToolTip="Sample rate (kHz)" />
+                                        <TextBlock Text="kHz" FontFamily="Tahoma" FontSize="9" Foreground="#1E7A1E" Margin="4,10,0,0" VerticalAlignment="Center" />
+                                        <StackPanel Orientation="Vertical" Margin="16,0,0,0" VerticalAlignment="Center">
+                                            <TextBlock x:Name="StereoLabel" Text="STEREO" FontFamily="Tahoma" FontSize="10" FontWeight="SemiBold" Foreground="#0E3A0E" />
+                                            <TextBlock x:Name="MonoLabel" Text="MONO" FontFamily="Tahoma" FontSize="10" FontWeight="SemiBold" Foreground="#0E3A0E" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                        <Button x:Name="TimeDisplayButton" Style="{StaticResource WaMetalButton}" Padding="0" BorderThickness="0" Background="Transparent" ToolTipService.ToolTip="Toggle elapsed / remaining" Click="TimeDisplay_Click">
+                                            <controls:LcdNumber x:Name="TimeDisplay" Text="88:88" DigitWidth="24" />
+                                        </Button>
+                                    </StackPanel>
+                                </Grid>
+
+                                <!-- scrolling title marquee -->
+                                <Border Grid.Row="1" Background="#050D05" BorderBrush="#0A160A" BorderThickness="0,1" Margin="-6,0">
+                                    <Canvas x:Name="TickerCanvas">
+                                        <TextBlock x:Name="TickerText" Text="*** WINAMP CLASSIC ***  It really whips the llama's ass!" FontFamily="Consolas" FontSize="14" FontWeight="Bold" Foreground="#22E222" Canvas.Left="0" />
+                                    </Canvas>
+                                </Border>
+
+                                <!-- spectrum analyzer -->
+                                <controls:WinampSpectrum x:Name="Spectrum" Grid.Row="2" Margin="-6,2,-6,-4" />
+                            </Grid>
+                        </Border>
+
+                        <!-- seek bar -->
+                        <controls:ClassicSlider x:Name="Seekbar" Canvas.Left="14" Canvas.Top="122" Width="522" Minimum="0" Maximum="100" ShowFill="True" ToolTipService.ToolTip="Seek" />
+
+                        <!-- transport -->
+                        <StackPanel x:Name="TransportPanel" Canvas.Left="14" Canvas.Top="146" Orientation="Horizontal" Spacing="6">
+                            <Button x:Name="BtnPrev" Style="{StaticResource WaMetalButton}" Width="44" Height="38" Padding="0" ToolTipService.ToolTip="Previous" Click="BtnPrev_Click">
+                                <Path Data="M0,3 h3 v10 h-3 z M16,2 L5,8 L16,14 Z" Fill="#D8DCE0" Stretch="None" Width="16" Height="16" />
+                            </Button>
+                            <Button x:Name="BtnPlay" Style="{StaticResource WaMetalButton}" Width="44" Height="38" Padding="0" ToolTipService.ToolTip="Play" Click="BtnPlay_Click">
+                                <Path Data="M3,2 L15,8 L3,14 Z" Fill="#2BE32B" Stretch="None" Width="16" Height="16" />
+                            </Button>
+                            <Button x:Name="BtnPause" Style="{StaticResource WaMetalButton}" Width="44" Height="38" Padding="0" ToolTipService.ToolTip="Pause" Click="BtnPause_Click">
+                                <Path Data="M3,2 h3 v12 h-3 z M10,2 h3 v12 h-3 z" Fill="#D8DCE0" Stretch="None" Width="16" Height="16" />
+                            </Button>
+                            <Button x:Name="BtnStop" Style="{StaticResource WaMetalButton}" Width="44" Height="38" Padding="0" ToolTipService.ToolTip="Stop" Click="BtnStop_Click">
+                                <Path Data="M3,3 h10 v10 h-10 z" Fill="#D8DCE0" Stretch="None" Width="16" Height="16" />
+                            </Button>
+                            <Button x:Name="BtnEject" Style="{StaticResource WaMetalButton}" Width="44" Height="38" Padding="0" ToolTipService.ToolTip="Eject (open file)" Click="BtnEject_Click">
+                                <Path Data="M2,8 L8,1 L14,8 Z M2,10 h12 v4 h-12 z" Fill="#D8DCE0" Stretch="None" Width="16" Height="15" />
+                            </Button>
+                        </StackPanel>
+
+                        <!-- toggles -->
+                        <ToggleButton x:Name="BtnShuffle" Style="{StaticResource WaToggleButton}" Canvas.Left="290" Canvas.Top="146" Width="76" Height="17" Padding="0" Content="SHUFFLE" FontSize="10" ToolTipService.ToolTip="Shuffle playback order" Click="BtnShuffle_Click" />
+                        <ToggleButton x:Name="BtnRepeat" Style="{StaticResource WaToggleButton}" Canvas.Left="290" Canvas.Top="167" Width="76" Height="17" Padding="0" Content="REPEAT" FontSize="10" ToolTipService.ToolTip="Repeat playlist" Click="BtnRepeat_Click" />
+
+                        <!-- volume / balance -->
+                        <controls:ClassicSlider x:Name="VolumeSlider" Canvas.Left="374" Canvas.Top="146" Width="162" Minimum="0" Maximum="100" ToolTipService.ToolTip="Volume" />
+                        <controls:ClassicSlider x:Name="BalanceSlider" Canvas.Left="374" Canvas.Top="167" Width="82" Minimum="-50" Maximum="50" ToolTipService.ToolTip="Balance" />
+                        <Button x:Name="BtnEqToggle" Style="{StaticResource WaMetalButton}" Canvas.Left="462" Canvas.Top="167" Width="24" Height="17" Padding="0" FontSize="9" Content="EQ" ToolTipService.ToolTip="Equalizer" Click="BtnEqToggle_Click" />
+                        <Button x:Name="BtnPlToggle" Style="{StaticResource WaMetalButton}" Canvas.Left="490" Canvas.Top="167" Width="24" Height="17" Padding="0" FontSize="9" Content="PL" ToolTipService.ToolTip="Playlist editor" Click="BtnPlToggle_Click" />
+                        <Button x:Name="BtnMlToggle" Style="{StaticResource WaMetalButton}" Canvas.Left="518" Canvas.Top="167" Width="24" Height="17" Padding="0" FontSize="9" Content="ML" ToolTipService.ToolTip="Media library" Click="BtnMlToggle_Click" />
+                    </Canvas>
+                </Grid>
+            </Border>
+
+            <!-- ================= EQUALIZER WINDOW (550 x 232) ================= -->
+            <Border x:Name="EqWin" Height="232" Width="550" Visibility="Collapsed" Background="{StaticResource WaBodyBrush}" BorderBrush="#14141A" BorderThickness="1" CornerRadius="2" Margin="0,0,0,2">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="36" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Border x:Name="EqTitleBar" Grid.Row="0" Background="{StaticResource WaTitleBarBrush}" BorderBrush="#24242C" BorderThickness="0,0,0,1">
+                        <Grid Background="Transparent">
+                            <TextBlock Text="WINAMP EQUALIZER" Style="{StaticResource WaTitleText}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" IsHitTestVisible="False" />
+                            <Button x:Name="BtnEqClose" Style="{StaticResource WaMetalButton}" Width="30" Height="22" Padding="0" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,6,0" ToolTipService.ToolTip="Close" Click="BtnEqToggle_Click">
+                                <Path Data="M0,0 L8,8 M8,0 L0,8" Stroke="#101014" StrokeThickness="2" Stretch="None" Width="8" Height="8" />
+                            </Button>
+                        </Grid>
+                    </Border>
+
+                    <Canvas Grid.Row="1">
+                        <ToggleButton x:Name="BtnEqOn" Style="{StaticResource WaToggleButton}" Canvas.Left="10" Canvas.Top="6" Width="50" Height="18" Padding="0" Content="ON" FontSize="10" ToolTipService.ToolTip="Enable EQ" Click="BtnEqOn_Click" />
+                        <ToggleButton x:Name="BtnEqAuto" Style="{StaticResource WaToggleButton}" Canvas.Left="10" Canvas.Top="28" Width="50" Height="18" Padding="0" Content="AUTO" FontSize="10" ToolTipService.ToolTip="Auto-apply preset from song genre" Click="BtnEqAuto_Click" />
+
+                        <Button x:Name="BtnEqPresets" Style="{StaticResource WaMetalButton}" Canvas.Left="66" Canvas.Top="6" Width="78" Height="18" Padding="0" Content="PRESETS" FontSize="10" ToolTipService.ToolTip="Load an EQ preset">
+                            <Button.Flyout>
+                                <MenuFlyout x:Name="EqPresetsFlyout" />
+                            </Button.Flyout>
+                        </Button>
+
+                        <!-- EQ response curve -->
+                        <Border Canvas.Left="152" Canvas.Top="4" Width="386" Height="58" Background="{StaticResource WaLcdBgBrush}" BorderBrush="#060C06" BorderThickness="1" CornerRadius="2">
+                            <Canvas x:Name="EqGraphCanvas" />
+                        </Border>
+
+                        <!-- preamp fader -->
+                        <StackPanel Canvas.Left="14" Canvas.Top="68" Orientation="Vertical">
+                            <controls:ClassicSlider x:Name="PreampSlider" Orientation="Vertical" Width="28" Height="112" Minimum="-12" Maximum="12" Step="0.5" ShowFill="False" ToolTipService.ToolTip="Preamp" />
+                            <TextBlock Text="PRE" Style="{StaticResource WaTinyText}" FontSize="9" HorizontalAlignment="Center" Margin="0,4,0,0" />
+                        </StackPanel>
+
+                        <!-- 10 band faders (built in code) -->
+                        <StackPanel x:Name="EqBandsHost" Canvas.Left="60" Canvas.Top="68" Orientation="Horizontal" />
+
+                        <!-- dB scale -->
+                        <TextBlock Canvas.Left="528" Canvas.Top="70" Text="+12" Style="{StaticResource WaTinyText}" FontSize="9" Foreground="#6E786E" />
+                        <TextBlock Canvas.Left="528" Canvas.Top="120" Text="0" Style="{StaticResource WaTinyText}" FontSize="9" Foreground="#6E786E" />
+                        <TextBlock Canvas.Left="528" Canvas.Top="166" Text="-12" Style="{StaticResource WaTinyText}" FontSize="9" Foreground="#6E786E" />
+                    </Canvas>
+                </Grid>
+            </Border>
+
+            <!-- ================= PLAYLIST EDITOR WINDOW (550 x 328) ================= -->
+            <Border x:Name="PlWin" Height="328" Width="550" Background="{StaticResource WaBodyBrush}" BorderBrush="#14141A" BorderThickness="1" CornerRadius="2" Margin="0,0,0,2">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="36" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="46" />
+                    </Grid.RowDefinitions>
+
+                    <Border x:Name="PlTitleBar" Grid.Row="0" Background="{StaticResource WaPlHeaderBrush}" BorderBrush="#004000" BorderThickness="1">
+                        <Grid Background="Transparent">
+                            <TextBlock Text="WINAMP PLAYLIST" FontFamily="Tahoma" FontSize="13" FontWeight="Bold" Foreground="#062006" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" IsHitTestVisible="False" />
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,6,0">
+                                <controls:LcdNumber x:Name="PlTotalTime" Text="0:00" DigitWidth="10" Margin="0,0,10,0" VerticalAlignment="Center" ToolTipService.ToolTip="Total playlist time" IsHitTestVisible="False" />
+                                <Button x:Name="BtnPlClose" Style="{StaticResource WaMetalButton}" Width="30" Height="22" Padding="0" ToolTipService.ToolTip="Close" Click="BtnPlToggle_Click">
+                                    <Path Data="M0,0 L8,8 M8,0 L0,8" Stroke="#101014" StrokeThickness="2" Stretch="None" Width="8" Height="8" />
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <Border Grid.Row="1" Background="#000000" BorderBrush="#060A06" BorderThickness="1,0" Margin="6,2">
+                        <ListView x:Name="PlaylistList"
+                                  Background="Transparent"
+                                  SelectionMode="Extended"
+                                  ItemContainerStyle="{StaticResource WaPlaylistItemStyle}"
+                                  DoubleTapped="PlaylistList_DoubleTapped"
+                                  CanReorderItems="True"
+                                  AllowDrop="True"
+                                  DragItemsCompleted="PlaylistList_DragItemsCompleted">
+                            <ListView.ItemTemplate>
+                                <DataTemplate x:DataType="models:Song">
+                                    <Grid Height="25" ColumnSpacing="6" Margin="8,0,10,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="42" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="52" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock x:Name="IndexText" FontFamily="Consolas" FontSize="12" Foreground="#00B800" VerticalAlignment="Center" Text="1." />
+                                        <TextBlock Grid.Column="1" FontFamily="Consolas" FontSize="12" Foreground="#00E800" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" Text="{x:Bind DisplayTitle}" />
+                                        <TextBlock Grid.Column="2" FontFamily="Consolas" FontSize="12" Foreground="#00B800" TextAlignment="Right" VerticalAlignment="Center" Text="{x:Bind DurationText}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Border>
+
+                    <!-- playlist bottom bar -->
+                    <Border Grid.Row="2" Background="#0E140E" BorderBrush="#060A06" BorderThickness="1" Margin="6,0,6,4" CornerRadius="2" Padding="4">
+                        <Grid VerticalAlignment="Center">
+                            <StackPanel Orientation="Horizontal" Spacing="4" HorizontalAlignment="Left">
+                                <Button x:Name="BtnPlAdd" Style="{StaticResource WaMetalButton}" Width="58" Height="26" Padding="0" Content="ADD" FontSize="10" ToolTipService.ToolTip="Add file(s) or folder to playlist">
+                                    <Button.Flyout>
+                                        <MenuFlyout>
+                                            <MenuFlyoutItem Text="Add file(s)..." Click="MenuOpenFiles_Click" />
+                                            <MenuFlyoutItem Text="Add directory..." Click="MenuAddFolder_Click" />
+                                        </MenuFlyout>
+                                    </Button.Flyout>
+                                </Button>
+                                <Button x:Name="BtnPlRem" Style="{StaticResource WaMetalButton}" Width="58" Height="26" Padding="0" Content="REM" FontSize="10" ToolTipService.ToolTip="Remove selected tracks or clear playlist">
+                                    <Button.Flyout>
+                                        <MenuFlyout>
+                                            <MenuFlyoutItem Text="Remove selected" Click="PlRemoveSelected_Click" />
+                                            <MenuFlyoutItem Text="Crop (remove all but selected)" Click="PlCrop_Click" />
+                                            <MenuFlyoutSeparator />
+                                            <MenuFlyoutItem Text="Clear playlist" Click="PlClear_Click" />
+                                        </MenuFlyout>
+                                    </Button.Flyout>
+                                </Button>
+                                <Button x:Name="BtnPlSel" Style="{StaticResource WaMetalButton}" Width="58" Height="26" Padding="0" Content="SEL" FontSize="10" ToolTipService.ToolTip="Select all, invert selection, or select none">
+                                    <Button.Flyout>
+                                        <MenuFlyout>
+                                            <MenuFlyoutItem Text="Select all" Click="PlSelectAll_Click" />
+                                            <MenuFlyoutItem Text="Invert selection" Click="PlSelectInvert_Click" />
+                                            <MenuFlyoutItem Text="Select none" Click="PlSelectNone_Click" />
+                                        </MenuFlyout>
+                                    </Button.Flyout>
+                                </Button>
+                                <Button x:Name="BtnPlMisc" Style="{StaticResource WaMetalButton}" Width="64" Height="26" Padding="0" Content="MISC" FontSize="10" ToolTipService.ToolTip="Sort or randomize playlist order">
+                                    <Button.Flyout>
+                                        <MenuFlyout>
+                                            <MenuFlyoutItem Text="Sort by title" Click="PlSortTitle_Click" />
+                                            <MenuFlyoutItem Text="Sort by artist" Click="PlSortArtist_Click" />
+                                            <MenuFlyoutItem Text="Sort by filename" Click="PlSortPath_Click" />
+                                            <MenuFlyoutItem Text="Randomize order" Click="PlRandomize_Click" />
+                                        </MenuFlyout>
+                                    </Button.Flyout>
+                                </Button>
+                                <Button x:Name="BtnPlList" Style="{StaticResource WaMetalButton}" Width="64" Height="26" Padding="0" Content="LIST" FontSize="10" ToolTipService.ToolTip="Manage playlist or remove missing files">
+                                    <Button.Flyout>
+                                        <MenuFlyout>
+                                            <MenuFlyoutItem Text="New playlist (clear)" Click="PlClear_Click" />
+                                            <MenuFlyoutItem Text="Remove missing files" Click="PlRemoveDead_Click" />
+                                        </MenuFlyout>
+                                    </Button.Flyout>
+                                </Button>
+                            </StackPanel>
+                            <TextBlock x:Name="PlStatusText" Text="0 items  0:00" FontFamily="Consolas" FontSize="12" Foreground="#00E800" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,6,0" />
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <!-- ================= MEDIA LIBRARY WINDOW (550 x 480) ================= -->
+            <Border x:Name="MlWin" Height="480" Width="550" Visibility="Collapsed" Background="{StaticResource WaBodyBrush}" BorderBrush="#14141A" BorderThickness="1" CornerRadius="2">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="36" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Border x:Name="MlTitleBar" Grid.Row="0" Background="{StaticResource WaTitleBarBrush}" BorderBrush="#24242C" BorderThickness="0,0,0,1">
+                        <Grid Background="Transparent">
+                            <TextBlock Text="WINAMP MEDIA LIBRARY" Style="{StaticResource WaTitleText}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" IsHitTestVisible="False" />
+                            <Button x:Name="BtnMlClose" Style="{StaticResource WaMetalButton}" Width="30" Height="22" Padding="0" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,6,0" ToolTipService.ToolTip="Close" Click="BtnMlToggle_Click">
+                                <Path Data="M0,0 L8,8 M8,0 L0,8" Stroke="#101014" StrokeThickness="2" Stretch="None" Width="8" Height="8" />
+                            </Button>
+                        </Grid>
+                    </Border>
+
+                    <Grid Grid.Row="1" Margin="6">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="140" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0" Orientation="Vertical" Spacing="2" Margin="0,0,6,0">
+                            <ToggleButton x:Name="NavHome" Style="{StaticResource WaToggleButton}" Content="HOME" Click="Nav_Click" Tag="Home" Height="28" ToolTipService.ToolTip="Home" />
+                            <ToggleButton x:Name="NavLibrary" Style="{StaticResource WaToggleButton}" Content="LIBRARY" Click="Nav_Click" Tag="Library" Height="28" ToolTipService.ToolTip="Music Library" />
+                            <ToggleButton x:Name="NavArtists" Style="{StaticResource WaToggleButton}" Content="ARTISTS" Click="Nav_Click" Tag="Artists" Height="28" ToolTipService.ToolTip="Artists" />
+                            <ToggleButton x:Name="NavAlbums" Style="{StaticResource WaToggleButton}" Content="ALBUMS" Click="Nav_Click" Tag="Albums" Height="28" ToolTipService.ToolTip="Albums" />
+                            <ToggleButton x:Name="NavPlaylists" Style="{StaticResource WaToggleButton}" Content="PLAYLISTS" Click="Nav_Click" Tag="Playlists" Height="28" ToolTipService.ToolTip="Playlists" />
+                            <ToggleButton x:Name="NavFavorites" Style="{StaticResource WaToggleButton}" Content="FAVORITES" Click="Nav_Click" Tag="Favorites" Height="28" ToolTipService.ToolTip="Favorites" />
+                            <ToggleButton x:Name="NavRecent" Style="{StaticResource WaToggleButton}" Content="RECENT" Click="Nav_Click" Tag="Recent" Height="28" ToolTipService.ToolTip="Recently Played" />
+                            <ToggleButton x:Name="NavSearch" Style="{StaticResource WaToggleButton}" Content="SEARCH &amp; GET" Click="Nav_Click" Tag="Search" Height="28" ToolTipService.ToolTip="Search &amp; Download" />
+                            <ToggleButton x:Name="NavSettings" Style="{StaticResource WaToggleButton}" Content="SETTINGS" Click="Nav_Click" Tag="Settings" Height="28" ToolTipService.ToolTip="Settings" />
+                        </StackPanel>
+
+                        <Border Grid.Column="1" Background="#0A120A" BorderBrush="#060A06" BorderThickness="1" CornerRadius="2">
+                            <Frame x:Name="ContentFrame" Margin="2" />
+                        </Border>
+                    </Grid>
+                </Grid>
+            </Border>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -1,0 +1,370 @@
+﻿<UserControl
+    x:Class="NewWinampClassic.Controls.MusicVisualizerControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <!--  Storyboards for different visualizer effects  -->
+        <Storyboard x:Name="CircularWaveStoryboard" RepeatBehavior="Forever">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="CircularWave" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.Rotation)">
+                <EasingDoubleKeyFrame KeyTime="0:0:0" Value="0" />
+                <EasingDoubleKeyFrame KeyTime="0:0:4" Value="360" />
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+
+        <Storyboard x:Name="PulseStoryboard" RepeatBehavior="Forever">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="PulseCircle" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)">
+                <EasingDoubleKeyFrame KeyTime="0:0:0" Value="0.3" />
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="1.2" />
+                <EasingDoubleKeyFrame KeyTime="0:0:1" Value="0.3" />
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="PulseCircle" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)">
+                <EasingDoubleKeyFrame KeyTime="0:0:0" Value="0.3" />
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="1.2" />
+                <EasingDoubleKeyFrame KeyTime="0:0:1" Value="0.3" />
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+
+        <Storyboard x:Name="RippleStoryboard" RepeatBehavior="Forever">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="RippleEffect1" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)">
+                <EasingDoubleKeyFrame KeyTime="0:0:0" Value="0" />
+                <EasingDoubleKeyFrame KeyTime="0:0:3" Value="10" />
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="RippleEffect1" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)">
+                <EasingDoubleKeyFrame KeyTime="0:0:0" Value="0" />
+                <EasingDoubleKeyFrame KeyTime="0:0:3" Value="10" />
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="RippleEffect1" Storyboard.TargetProperty="Opacity">
+                <EasingDoubleKeyFrame KeyTime="0:0:0" Value="0.8" />
+                <EasingDoubleKeyFrame KeyTime="0:0:3" Value="0" />
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+
+        <Storyboard x:Name="ColorCycleStoryboard" RepeatBehavior="Forever">
+            <ColorAnimationUsingKeyFrames Storyboard.TargetName="ColorCycleBrush" Storyboard.TargetProperty="Color">
+                <EasingColorKeyFrame KeyTime="0:0:0" Value="#FF0078D4" />
+                <EasingColorKeyFrame KeyTime="0:0:1" Value="#FFFF6B6B" />
+                <EasingColorKeyFrame KeyTime="0:0:2" Value="#FF4ECDC4" />
+                <EasingColorKeyFrame KeyTime="0:0:3" Value="#FF45B7D1" />
+                <EasingColorKeyFrame KeyTime="0:0:4" Value="#FF96CEB4" />
+                <EasingColorKeyFrame KeyTime="0:0:5" Value="#FFFECA57" />
+                <EasingColorKeyFrame KeyTime="0:0:6" Value="#FF0078D4" />
+            </ColorAnimationUsingKeyFrames>
+        </Storyboard>
+    </UserControl.Resources>
+
+    <Grid x:Name="VisualizerGrid" Background="Black">
+        <!--  Visualizer Canvas - Full Screen  -->
+        <Canvas x:Name="VisualizerCanvas">
+
+            <!--  Effect 0: Spectrum Bars  -->
+            <Grid x:Name="SpectrumBars" Visibility="Visible">
+                <ItemsControl x:Name="SpectrumBarsControl">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </Grid>
+
+            <!--  Effect 1: Circular Wave  -->
+            <Grid x:Name="CircularWave" Visibility="Collapsed">
+                <Grid.RenderTransform>
+                    <CompositeTransform />
+                </Grid.RenderTransform>
+                <Ellipse
+                    x:Name="OuterCircle"
+                    Fill="Transparent"
+                    Stroke="#FF0078D4"
+                    StrokeThickness="3" />
+                <Ellipse
+                    x:Name="MiddleCircle"
+                    Fill="Transparent"
+                    Stroke="#FF4ECDC4"
+                    StrokeThickness="2" />
+                <Ellipse
+                    x:Name="InnerCircle"
+                    Fill="Transparent"
+                    Stroke="#FFFF6B6B"
+                    StrokeThickness="1" />
+            </Grid>
+
+            <!--  Effect 2: Pulse Circle  -->
+            <Grid x:Name="PulseCircle" Visibility="Collapsed">
+                <Canvas x:Name="PulseCanvas" />
+            </Grid>
+
+            <!--  Effect 3: Ripple Effect  -->
+            <Grid x:Name="RippleEffect" Visibility="Collapsed">
+                <Ellipse
+                    x:Name="RippleEffect1"
+                    Width="100"
+                    Height="100"
+                    Fill="Transparent"
+                    Stroke="#FF0078D4"
+                    StrokeThickness="3">
+                    <Ellipse.RenderTransform>
+                        <CompositeTransform CenterX="50" CenterY="50" />
+                    </Ellipse.RenderTransform>
+                </Ellipse>
+            </Grid>
+
+            <!--  Effect 4: Color Cycle  -->
+            <Grid x:Name="ColorCycle" Visibility="Collapsed">
+                <Canvas x:Name="ColorBoxesCanvas" />
+                <Grid.Background>
+                    <SolidColorBrush x:Name="ColorCycleBrush" Color="#FF0078D4" />
+                </Grid.Background>
+            </Grid>
+
+            <!--  Effect 5: Bouncing Dots  -->
+            <Grid x:Name="BouncingDots" Visibility="Collapsed">
+                <Canvas x:Name="DotsCanvas" />
+            </Grid>
+
+            <!--  Effect 6: Spiral  -->
+            <Grid x:Name="Spiral" Visibility="Collapsed">
+                <Canvas x:Name="SpiralCanvas" />
+            </Grid>
+
+            <!--  Effect 7: Particle System  -->
+            <Grid x:Name="ParticleSystem" Visibility="Collapsed">
+                <Canvas x:Name="ParticleCanvas" />
+            </Grid>
+
+            <!--  Effect 8: Matrix Rain  -->
+            <Grid x:Name="MatrixRain" Visibility="Collapsed">
+                <Canvas x:Name="MatrixCanvas" />
+            </Grid>
+
+            <!--  Effect 9: Starlights  -->
+            <Grid x:Name="Starlights" Visibility="Collapsed">
+                <Canvas x:Name="StarlightsCanvas" />
+            </Grid>
+
+            <!--  Effect 10: Night Rain  -->
+            <Grid x:Name="NightRain" Visibility="Collapsed">
+                <Canvas x:Name="NightRainCanvas" />
+            </Grid>
+
+            <!--  Effect 11: Winter Snow  -->
+            <Grid x:Name="WinterSnow" Visibility="Collapsed">
+                <Canvas x:Name="WinterSnowCanvas" />
+            </Grid>
+
+            <!--  Effect 12: Fall In Love  -->
+            <Grid x:Name="FallInLove" Visibility="Collapsed">
+                <Canvas x:Name="FallInLoveCanvas" />
+            </Grid>
+
+            <!--  Effect 13: Lightning Storm  -->
+            <Grid x:Name="LightningStorm" Visibility="Collapsed">
+                <Canvas x:Name="LightningCanvas" />
+            </Grid>
+
+            <!--  Effect 14: Ocean Waves  -->
+            <Grid x:Name="OceanWaves" Visibility="Collapsed">
+                <Canvas x:Name="OceanWavesCanvas" />
+            </Grid>
+
+            <!--  Effect 15: Fire Dance  -->
+            <Grid x:Name="FireDance" Visibility="Collapsed">
+                <Canvas x:Name="FireDanceCanvas" />
+            </Grid>
+
+            <!--  Effect 16: Galaxy Spiral  -->
+            <Grid x:Name="GalaxySpiral" Visibility="Collapsed">
+                <Canvas x:Name="GalaxySpiralCanvas" />
+            </Grid>
+
+            <!--  Effect 17: Neon Pulse  -->
+            <Grid x:Name="NeonPulse" Visibility="Collapsed">
+                <Canvas x:Name="NeonPulseCanvas" />
+            </Grid>
+
+            <!--  Effect 18: Crystal Formation  -->
+            <Grid x:Name="CrystalFormation" Visibility="Collapsed">
+                <Canvas x:Name="CrystalCanvas" />
+            </Grid>
+
+            <!--  Effect 19: Laser Show  -->
+            <Grid x:Name="LaserShow" Visibility="Collapsed">
+                <Canvas x:Name="LaserCanvas" />
+            </Grid>
+
+            <!--  Effect 20: Digital Rain  -->
+            <Grid x:Name="DigitalRain" Visibility="Collapsed">
+                <Canvas x:Name="DigitalRainCanvas" />
+            </Grid>
+
+            <!--  Effect 21: Plasma Storm  -->
+            <Grid x:Name="PlasmaStorm" Visibility="Collapsed">
+                <Canvas x:Name="PlasmaCanvas" />
+            </Grid>
+
+            <!--  Effect 22: Aurora Borealis  -->
+            <Grid x:Name="AuroraBorealis" Visibility="Collapsed">
+                <Canvas x:Name="AuroraCanvas" />
+            </Grid>
+
+            <!--  Effect 23: Fractal Tree  -->
+            <Grid x:Name="FractalTree" Visibility="Collapsed">
+                <Canvas x:Name="FractalTreeCanvas" />
+            </Grid>
+
+            <!--  Effect 24: Quantum Field  -->
+            <Grid x:Name="QuantumField" Visibility="Collapsed">
+                <Canvas x:Name="QuantumCanvas" />
+            </Grid>
+
+            <!--  Effect 25: Solar Flare  -->
+            <Grid x:Name="SolarFlare" Visibility="Collapsed">
+                <Canvas x:Name="SolarFlareCanvas" />
+            </Grid>
+
+            <!--  Effect 26: Geometric Patterns  -->
+            <Grid x:Name="GeometricPatterns" Visibility="Collapsed">
+                <Canvas x:Name="GeometricCanvas" />
+            </Grid>
+
+            <!--  Effect 27: Cyber Grid  -->
+            <Grid x:Name="CyberGrid" Visibility="Collapsed">
+                <Canvas x:Name="CyberGridCanvas" />
+            </Grid>
+
+            <!--  Effect 28: Nebula Cloud  -->
+            <Grid x:Name="NebulaCloud" Visibility="Collapsed">
+                <Canvas x:Name="NebulaCanvas" />
+            </Grid>
+
+            <!--  Effect 29: Energy Vortex  -->
+            <Grid x:Name="EnergyVortex" Visibility="Collapsed">
+                <Canvas x:Name="VortexCanvas" />
+            </Grid>
+
+            <!--  Effect 30: Hologram  -->
+            <Grid x:Name="Hologram" Visibility="Collapsed">
+                <Canvas x:Name="HologramCanvas" />
+            </Grid>
+
+        </Canvas>
+
+        <!--  Control Panel at Center Top  -->
+        <StackPanel
+            x:Name="SPControls"
+            Margin="20"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"
+            Background="Transparent"
+            Opacity="0.9"
+            Orientation="Horizontal">
+
+            <Button
+                x:Name="RandomButton"
+                Height="40"
+                Margin="4"
+                Background="Transparent"
+                Click="RandomButton_Click"
+                Content="🎲"
+                FontSize="20"
+                Foreground="White" />
+
+            <Button
+                x:Name="PreviousButton"
+                Height="40"
+                Margin="4"
+                Background="Transparent"
+                Click="PreviousButton_Click"
+                Content="◀"
+                FontSize="20"
+                Foreground="White" />
+
+            <ComboBox
+                x:Name="VisualizerComboBox"
+                Width="280"
+                Height="40"
+                Margin="4"
+                Background="Transparent"
+                FontSize="20"
+                Foreground="White"
+                SelectionChanged="VisualizerComboBox_SelectionChanged">
+                <ComboBoxItem Content="📊 Spectrum Bars" Tag="0" />
+                <ComboBoxItem Content="🌊 Circular Wave" Tag="1" />
+                <ComboBoxItem Content="🔘 Pulse Circle" Tag="2" />
+                <ComboBoxItem Content="💧 Ripple Effect" Tag="3" />
+                <ComboBoxItem Content="📦 Square Boxes Cycle" Tag="4" />
+                <ComboBoxItem Content="⚫ Bouncing Dots" Tag="5" />
+                <ComboBoxItem Content="🌀 Spiral" Tag="6" />
+                <ComboBoxItem Content="✨ Particle System" Tag="7" />
+                <ComboBoxItem Content="💻 Matrix Rain" Tag="8" />
+                <ComboBoxItem Content="⭐ Starlights" Tag="9" />
+                <ComboBoxItem Content="🌧️ Night Rain" Tag="10" />
+                <ComboBoxItem Content="❄️ Winter Snow" Tag="11" />
+                <ComboBoxItem Content="💕 Fall In Love" Tag="12" />
+                <ComboBoxItem Content="⚡ Lightning Storm" Tag="13" />
+                <ComboBoxItem Content="🌊 Ocean Waves" Tag="14" />
+                <ComboBoxItem Content="🔥 Fire Dance" Tag="15" />
+                <ComboBoxItem Content="🌌 Galaxy Spiral" Tag="16" />
+                <ComboBoxItem Content="💡 Neon Pulse" Tag="17" />
+                <ComboBoxItem Content="💎 Crystal Formation" Tag="18" />
+                <ComboBoxItem Content="🔦 Laser Show" Tag="19" />
+                <ComboBoxItem Content="💾 Digital Rain" Tag="20" />
+                <ComboBoxItem Content="🌩️ Plasma Storm" Tag="21" />
+                <ComboBoxItem Content="🌈 Aurora Borealis" Tag="22" />
+                <ComboBoxItem Content="🌳 Fractal Tree" Tag="23" />
+                <ComboBoxItem Content="⚛️ Quantum Field" Tag="24" />
+                <ComboBoxItem Content="☀️ Solar Flare" Tag="25" />
+                <ComboBoxItem Content="📐 Geometric Patterns" Tag="26" />
+                <ComboBoxItem Content="🕸️ Cyber Grid" Tag="27" />
+                <ComboBoxItem Content="☁️ Nebula Cloud" Tag="28" />
+                <ComboBoxItem Content="🌪️ Energy Vortex" Tag="29" />
+                <ComboBoxItem Content="📡 Hologram" Tag="30" />
+            </ComboBox>
+
+            <Button
+                x:Name="NextButton"
+                Height="40"
+                Margin="4"
+                Background="Transparent"
+                Click="NextButton_Click"
+                Content="▶"
+                FontSize="20"
+                Foreground="White" />
+
+            <Button
+                x:Name="SpeedDownButton"
+                Height="40"
+                Margin="4"
+                Background="Transparent"
+                Click="SpeedDownButton_Click"
+                Content="⏪"
+                FontSize="20"
+                Foreground="White" />
+
+            <TextBlock
+                x:Name="SpeedDisplay"
+                Margin="4"
+                VerticalAlignment="Center"
+                FontSize="20"
+                FontWeight="Bold"
+                Foreground="White"
+                Text="1.0x"
+                TextAlignment="Center" />
+
+            <Button
+                x:Name="SpeedUpButton"
+                Height="40"
+                Margin="4"
+                Background="Transparent"
+                Click="SpeedUpButton_Click"
+                Content="⏩"
+                FontSize="20"
+                Foreground="White" />
+
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -1,0 +1,94 @@
+﻿<Page
+    x:Class="NewWinampClassic.Views.HomePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    NavigationCacheMode="Disabled">
+
+    <ScrollViewer
+        HorizontalScrollBarVisibility="Disabled"
+        VerticalScrollBarVisibility="Auto"
+        Padding="8,6,8,12">
+        <StackPanel Spacing="10" Background="#050D05">
+            <!-- Header -->
+            <TextBlock x:Name="WelcomeText" Text="WINAMP MEDIA LIBRARY" FontFamily="Consolas" FontSize="13" FontWeight="Bold" Foreground="#22E222" />
+
+            <!-- Stats Bar -->
+            <Grid ColumnSpacing="6">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Style="{StaticResource WaMetalButton}" Height="26" Padding="4,0" HorizontalAlignment="Stretch" Click="SongsCard_Tapped">
+                    <TextBlock FontFamily="Consolas" FontSize="10" TextAlignment="Center">
+                        <Run Text="SONGS:" Foreground="#00B800" />
+                        <Run x:Name="SongsCountText" Text="0" Foreground="#00FF41" FontWeight="Bold" />
+                    </TextBlock>
+                </Button>
+                <Button Grid.Column="1" Style="{StaticResource WaMetalButton}" Height="26" Padding="4,0" HorizontalAlignment="Stretch" Click="AlbumsCard_Tapped">
+                    <TextBlock FontFamily="Consolas" FontSize="10" TextAlignment="Center">
+                        <Run Text="ALBUMS:" Foreground="#00B800" />
+                        <Run x:Name="AlbumsCountText" Text="0" Foreground="#00FF41" FontWeight="Bold" />
+                    </TextBlock>
+                </Button>
+                <Button Grid.Column="2" Style="{StaticResource WaMetalButton}" Height="26" Padding="4,0" HorizontalAlignment="Stretch" Click="ArtistsCard_Tapped">
+                    <TextBlock FontFamily="Consolas" FontSize="10" TextAlignment="Center">
+                        <Run Text="ARTISTS:" Foreground="#00B800" />
+                        <Run x:Name="ArtistsCountText" Text="0" Foreground="#00FF41" FontWeight="Bold" />
+                    </TextBlock>
+                </Button>
+            </Grid>
+
+            <!-- Search -->
+            <AutoSuggestBox x:Name="HomeSearchBox" Height="24" FontFamily="Consolas" FontSize="11" PlaceholderText="Search library..." QueryIcon="Find" QuerySubmitted="HomeSearchBox_QuerySubmitted" />
+
+            <!-- Setup Panel for < 10 songs -->
+            <Border
+                x:Name="SetupPanel"
+                Visibility="Collapsed"
+                Padding="8"
+                Background="#0F200F"
+                BorderBrush="#22E222"
+                BorderThickness="1"
+                CornerRadius="4">
+                <StackPanel Spacing="6">
+                    <TextBlock
+                        Text="Library is empty. Scan folders to import songs:"
+                        FontFamily="Consolas"
+                        FontSize="11"
+                        Foreground="#00E800"
+                        TextWrapping="Wrap" />
+                    <Button
+                        x:Name="SetupButton"
+                        Style="{StaticResource WaMetalButton}"
+                        Click="GoToSettings_Click"
+                        Height="24"
+                        Padding="8,0">
+                        <TextBlock Text="CONFIG SCAN FOLDERS" FontFamily="Consolas" FontSize="10" FontWeight="Bold" />
+                    </Button>
+                </StackPanel>
+            </Border>
+
+            <!-- Recently Played -->
+            <StackPanel Spacing="4">
+                <TextBlock Text="RECENTLY PLAYED" FontFamily="Consolas" FontSize="11" FontWeight="Bold" Foreground="#22E222" />
+                <ListView x:Name="RecentListView" MaxHeight="140" Background="#000000" SelectionMode="Single" IsItemClickEnabled="True" ItemContainerStyle="{StaticResource WaPlaylistItemStyle}" />
+            </StackPanel>
+
+            <!-- Most Played -->
+            <StackPanel Spacing="4">
+                <TextBlock Text="MOST PLAYED" FontFamily="Consolas" FontSize="11" FontWeight="Bold" Foreground="#22E222" />
+                <ListView x:Name="MostPlayedGridView" MaxHeight="140" Background="#000000" SelectionMode="Single" IsItemClickEnabled="True" ItemContainerStyle="{StaticResource WaPlaylistItemStyle}" />
+            </StackPanel>
+
+            <!-- Suggested -->
+            <StackPanel x:Name="SuggestedSection" Spacing="4" Visibility="Collapsed">
+                <TextBlock Text="SUGGESTED SONGS" FontFamily="Consolas" FontSize="11" FontWeight="Bold" Foreground="#22E222" />
+                <ListView x:Name="SuggestedListView" MaxHeight="140" Background="#000000" SelectionMode="Single" IsItemClickEnabled="True" ItemContainerStyle="{StaticResource WaPlaylistItemStyle}" />
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

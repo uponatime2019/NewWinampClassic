@@ -1,0 +1,69 @@
+﻿<Page
+    x:Class="NewWinampClassic.Views.AlbumsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:helpers="using:NewWinampClassic.Helpers"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <helpers:ArtworkPathConverter x:Key="ArtworkConv" />
+    </Page.Resources>
+
+    <Grid Padding="8,6,8,6" Background="#050D05">
+        <!-- Album Grid / List -->
+        <Grid x:Name="AlbumsScrollViewer">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Text="WINAMP ALBUMS" FontFamily="Consolas" FontSize="13" FontWeight="Bold" Foreground="#22E222" Margin="0,0,0,6" />
+            <ListView x:Name="AlbumsGridView" Grid.Row="1" Background="#000000" SelectionMode="Single" IsItemClickEnabled="True" ItemContainerStyle="{StaticResource WaPlaylistItemStyle}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Height="24" ColumnSpacing="6" Margin="4,0,4,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock FontFamily="Consolas" FontSize="11" Foreground="#00E800" TextTrimming="CharacterEllipsis" VerticalAlignment="Center">
+                                <Run Text="{Binding Name}" FontWeight="SemiBold" />
+                                <Run Text=" - " Foreground="#008800" />
+                                <Run Text="{Binding Artist}" Foreground="#00B800" />
+                            </TextBlock>
+                            <TextBlock Grid.Column="1" FontFamily="Consolas" FontSize="10" Foreground="#00B800" VerticalAlignment="Center">
+                                <Run Text="{Binding TrackCount}" />
+                                <Run Text=" tracks" />
+                            </TextBlock>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
+
+        <!-- Album Detail -->
+        <Grid x:Name="AlbumDetailPanel" Visibility="Collapsed">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0" Margin="0,0,0,6">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Style="{StaticResource WaMetalButton}" Height="22" Padding="6,0" Click="Back_Click" Margin="0,0,6,0">
+                    <TextBlock Text="« BACK" FontFamily="Consolas" FontSize="10" FontWeight="Bold" />
+                </Button>
+                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                    <TextBlock x:Name="DetailTitle" FontFamily="Consolas" FontSize="12" FontWeight="Bold" Foreground="#22E222" TextTrimming="CharacterEllipsis" />
+                    <TextBlock x:Name="DetailSubtitle" FontFamily="Consolas" FontSize="10" Foreground="#00B800" TextTrimming="CharacterEllipsis" />
+                </StackPanel>
+            </Grid>
+
+            <ListView x:Name="AlbumSongsListView" Grid.Row="1" Background="#000000" SelectionMode="Single" IsItemClickEnabled="True" ItemContainerStyle="{StaticResource WaPlaylistItemStyle}" />
+        </Grid>
+    </Grid>
+</Page>

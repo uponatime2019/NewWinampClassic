@@ -1,0 +1,31 @@
+﻿<Page
+    x:Class="NewWinampClassic.Views.QueuePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Padding="8,6,8,6" RowSpacing="6" Background="#050D05">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="PLAY QUEUE" FontFamily="Consolas" FontSize="13" FontWeight="Bold" Foreground="#22E222" VerticalAlignment="Center" />
+            <Button Grid.Column="1" Style="{StaticResource WaMetalButton}" Height="22" Padding="6,0" Click="ClearQueue_Click">
+                <TextBlock Text="CLEAR" FontFamily="Consolas" FontSize="10" FontWeight="Bold" />
+            </Button>
+        </Grid>
+
+        <ListView x:Name="QueueListView" Grid.Row="1" Background="#000000" SelectionMode="Single" IsItemClickEnabled="True" ItemContainerStyle="{StaticResource WaPlaylistItemStyle}" />
+
+        <TextBlock x:Name="QueueInfo" Grid.Row="2" FontFamily="Consolas" FontSize="10" Foreground="#00B800" Margin="2,2,0,0" />
+    </Grid>
+</Page>

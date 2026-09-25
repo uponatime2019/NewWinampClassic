@@ -1,0 +1,28 @@
+﻿<Page
+    x:Class="NewWinampClassic.Views.RecentlyPlayedPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Padding="8,6,8,6" RowSpacing="6" Background="#050D05">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="RECENTLY PLAYED" FontFamily="Consolas" FontSize="13" FontWeight="Bold" Foreground="#22E222" VerticalAlignment="Center" />
+            <Button Grid.Column="1" Style="{StaticResource WaMetalButton}" Height="22" Padding="6,0" Click="PlayAll_Click">
+                <TextBlock Text="PLAY ALL" FontFamily="Consolas" FontSize="10" FontWeight="Bold" />
+            </Button>
+        </Grid>
+
+        <ListView x:Name="RecentListView" Grid.Row="1" Background="#000000" SelectionMode="Single" IsItemClickEnabled="True" ItemContainerStyle="{StaticResource WaPlaylistItemStyle}" />
+    </Grid>
+</Page>

@@ -1,0 +1,129 @@
+﻿<Page
+    x:Class="NewWinampClassic.Views.PlaylistsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="using:NewWinampClassic.Models"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <DataTemplate x:Key="PlaylistTemplate" x:DataType="models:Playlist">
+            <Grid Height="22" Padding="2,0">
+                <TextBlock
+                    Text="{x:Bind DisplayName}"
+                    FontFamily="Consolas"
+                    FontSize="11"
+                    Foreground="#00E800"
+                    TextTrimming="CharacterEllipsis"
+                    VerticalAlignment="Center" />
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Key="SongTemplate" x:DataType="models:Song">
+            <Grid Height="22" ColumnSpacing="4" Margin="2,0,4,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="46" />
+                </Grid.ColumnDefinitions>
+                <TextBlock FontFamily="Consolas" FontSize="11" Foreground="#00E800" TextTrimming="CharacterEllipsis" VerticalAlignment="Center">
+                    <Run Text="{x:Bind DisplayTitle}" />
+                    <Run Text=" - " Foreground="#008800" />
+                    <Run Text="{x:Bind DisplayArtist}" Foreground="#00B800" />
+                </TextBlock>
+                <TextBlock
+                    Grid.Column="1"
+                    Text="{x:Bind DurationText}"
+                    FontFamily="Consolas"
+                    FontSize="10"
+                    Foreground="#00B800"
+                    TextAlignment="Right"
+                    VerticalAlignment="Center" />
+            </Grid>
+        </DataTemplate>
+    </Page.Resources>
+
+    <Grid Padding="0" Background="#050D05">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="120" />
+            <ColumnDefinition Width="1" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!--  Sidebar: Playlist List  -->
+        <Grid Grid.Column="0" Padding="6,6,4,6">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0" Margin="0,0,0,6">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="PLAYLISTS" FontFamily="Consolas" FontSize="12" FontWeight="Bold" Foreground="#22E222" VerticalAlignment="Center" />
+                <Button Grid.Column="1" Style="{StaticResource WaMetalButton}" Height="20" Width="20" Padding="0" Click="CreatePlaylist_Click" ToolTipService.ToolTip="New Playlist">
+                    <FontIcon Glyph="&#xE710;" FontSize="10" />
+                </Button>
+            </Grid>
+
+            <ListView
+                x:Name="PlaylistListView"
+                Grid.Row="1"
+                Background="#000000"
+                ItemTemplate="{StaticResource PlaylistTemplate}"
+                SelectionMode="Single"
+                IsItemClickEnabled="True"
+                ItemContainerStyle="{StaticResource WaPlaylistItemStyle}"
+                ItemClick="PlaylistListView_ItemClick" />
+        </Grid>
+
+        <!--  Separator  -->
+        <Border Grid.Column="1" Background="#142014" />
+
+        <!--  Content: Selected Playlist Songs  -->
+        <Grid Grid.Column="2" Padding="6,6,6,6">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0" Margin="0,0,0,6">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="PlaylistTitleText" FontFamily="Consolas" FontSize="12" FontWeight="Bold" Foreground="#22E222" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+                <Button Grid.Column="1" Style="{StaticResource WaMetalButton}" Height="22" Padding="6,0" Click="PlayAll_Click" Visibility="Collapsed" x:Name="PlayAllBtn">
+                    <TextBlock Text="PLAY ALL" FontFamily="Consolas" FontSize="10" FontWeight="Bold" />
+                </Button>
+            </Grid>
+
+            <TextBlock
+                x:Name="EmptyText"
+                Grid.Row="1"
+                Text="Select a playlist to view tracks"
+                FontFamily="Consolas"
+                FontSize="11"
+                Foreground="#008800"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center" />
+
+            <ListView
+                x:Name="SongListView"
+                Grid.Row="1"
+                Background="#000000"
+                ItemTemplate="{StaticResource SongTemplate}"
+                SelectionMode="None"
+                IsItemClickEnabled="True"
+                ItemContainerStyle="{StaticResource WaPlaylistItemStyle}"
+                ItemClick="SongListView_ItemClick"
+                Visibility="Collapsed" />
+        </Grid>
+
+        <ContentDialog x:Name="CreateDialog" Title="Create Playlist" PrimaryButtonText="Create" CloseButtonText="Cancel" DefaultButton="Primary">
+            <TextBox x:Name="PlaylistNameBox" Header="Playlist Name" PlaceholderText="My Playlist" FontFamily="Consolas" />
+        </ContentDialog>
+    </Grid>
+</Page>
