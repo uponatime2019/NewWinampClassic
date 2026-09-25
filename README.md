@@ -190,6 +190,23 @@ New Winamp Classic/
 
 ---
 
+## 🗺️ Roadmap
+
+New Winamp Classic is under active development. Here's what's on the radar, roughly in priority order:
+
+- [ ] **Classic skin support** — load original Winamp 2.x `.wsz` skins so every faceplate can live again
+- [ ] **Crossfade & gapless playback** — smooth transitions between tracks with configurable crossfade length
+- [ ] **M3U / PLS playlist import & export** — full interop with classic playlist formats
+- [ ] **Internet radio** — SHOUTcast / Icecast streaming in the playlist and media library
+- [ ] **System media integration** — media-key handling and System Media Transport Controls (SMTC) overlay
+- [ ] **ReplayGain / volume normalization** — scan-based loudness leveling across the library
+- [ ] **Mini-player mode** — a compact always-on-top window like Winamp's windowshade
+- [ ] **Output device picker & WASAPI exclusive mode** — for bit-perfect listening
+- [ ] **More visualizer styles** — bigger FFT-driven presets in the spirit of MilkDrop
+- [ ] **Localization** — the UI is currently English-only
+
+Want something on this list sooner? Open an issue (or a PR 😉) and say so — the roadmap is flexible.
+
 ## 📄 License
 
 This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
