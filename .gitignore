@@ -29,3 +29,5 @@ _pkginfo.txt
 ## OS generated files
 .DS_Store
 Thumbs.db
+
+*.txt
