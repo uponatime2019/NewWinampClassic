@@ -14,7 +14,20 @@
   <img src="https://img.shields.io/badge/Windows%20App%20SDK-2.4-0078D7?style=flat" alt="Windows App SDK" />
   <img src="https://img.shields.io/badge/License-MIT-green.svg?style=flat" alt="License: MIT" />
   <img src="https://img.shields.io/badge/Platform-Windows%2010%20%7C%2011-0078D4?style=flat" alt="Platform" />
+  <a href="https://github.com/uponatime2019/NewWinampClassic/releases/latest"><img src="https://img.shields.io/github/v/release/uponatime2019/NewWinampClassic?color=blue&label=Latest%20Release" alt="Latest Release" /></a>
 </p>
+
+---
+
+## 📥 Download & run — no install needed
+
+The quickest way to try New Winamp Classic:
+
+1. Grab **`NewWinampClassic-vX.Y.Z-win-x64.zip`** from the [latest release](https://github.com/uponatime2019/NewWinampClassic/releases/latest)
+2. Right-click → **Extract All…**
+3. Double-click **`NewWinampClassic.exe`** — that's it. Portable, no installer, no admin rights, and no .NET download required (the runtime is bundled).
+
+> **First launch?** Windows SmartScreen may show *"Windows protected your PC"* because the app isn't code-signed — click **More info → Run anyway**.
 
 ---
 

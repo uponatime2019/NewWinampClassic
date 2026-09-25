@@ -31,3 +31,6 @@ _pkginfo.txt
 Thumbs.db
 
 *.txt
+
+# Local publish output
+publish_out/
